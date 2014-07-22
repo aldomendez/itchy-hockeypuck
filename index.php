@@ -5,9 +5,14 @@
 	<title>Material en FG</title>
 	<link rel="stylesheet" href="../jsLib/SemanticUi/0.19.0/packaged/css/semantic.min.css">
 	<style type="text/css">
-		.barcode {
-			font-family:"Free 3 of 9", Helvetica, sans-serif;font-size:1.75em;
-		}
+	@font-face {
+	    font-family: 'Free3of9'; /*a name to be used later*/
+	    src: url('http://cymautocert/osaapp/fonts/free3of9.ttf'); /*URL to font*/
+	}
+	.barcode {
+		font-family:"Free3of9", Helvetica, sans-serif;
+		font-size:1.75em;
+	}
 	</style>
 </head>
 <body>
@@ -23,7 +28,11 @@ r = new Ractive({
 	template:'#template',
 	data:{
 		serial_num:'',
-		series:series
+		series:series,
+		show:'serial_num',
+		availableStates:['serial_num','lpnList'],
+		actualLPN:'',
+		lpnData:[]
 	}
 });
 
@@ -37,40 +46,73 @@ r = new Ractive({
 		LPN: null,
 		ONHAND_QTY: "",
 		PACK_STATUS: "",
-		STATUS: "Searching...",
+		STATUS: "Buscando",
 	}
  }
 lookup = function (serial_num) {
-	found = -1;
 	for (var i = series.length - 1; i >= 0; i--) {
 		if (series[i]['JOB'] == serial_num){
-			found = i;
+			return i;
 		}
 	};
-	return found;
+	return -1;
 }
 r.on('addSerialTable',function (e) {
 	e.original.preventDefault();
-	series.push(PlaceHolder(e.context.serial_num));
-	datos = $.getJSON(
-		'toolbox.php',{
-			action:'getResults',
-			serial_num:e.context.serial_num
+	if (lookup(e.context.serial_num) == -1 || r.data.series.length == 0) {
+		series.push(PlaceHolder(e.context.serial_num));
+		datos = $.getJSON(
+			'toolbox.php',{
+				action:'getResults',
+				serial_num:e.context.serial_num
+			});
+		datos.done(function (datos) {
+			if (datos[0]['ITEM'] != null) {
+				ff = lookup(datos[0]['JOB']);
+				r.set("series."+ ff ,datos[0]);
+			}else{
+				ff = lookup(datos[0]['JOB']);
+				content = PlaceHolder(datos[0]['JOB']);
+				content.STATUS = "No se encontro";
+				r.set("series."+ ff ,content);
+			};
+		}).fail(function (error) {
 		});
-	datos.done(function (datos) {
-		console.log(datos.length);
-		if (datos.length !== 0) {
-			ff = lookup(datos[0]['JOB']);
-			r.set("series."+ ff ,datos[0]);
-		};
-	}).fail(function (error) {
-	});
+	};
 	r.set('serial_num','');
-})
+});
+
 r.on('delete',function (e) {
 	e.original.preventDefault();
 	series.splice(e.keypath.match(/\d/i)[0], 1);
+});
+
+r.on('gotoLPNList', function (e) {
+	e.original.preventDefault();
+	r.set('show', 'serial_num');
 })
+
+r.on('returnToSerialNumList', function (e) {
+	e.original.preventDefault();
+	r.set('show', 'lpnList');
+})
+
+r.on('checkLpn', function (e) {
+	e.original.preventDefault();
+	datos = $.getJSON(
+		'toolbox.php',{
+			action:'getLPN',
+			lpn:r.get('actualLPN')
+		}
+	);
+	datos.done(function (datos) {
+		r.set('lpnData',datos);
+		console.log(datos);
+	}).fail(function (error) {
+		console.log(error);
+	});
+	r.set('show', 'lpnList');
+});
 </script>
 </body>
 </html>
