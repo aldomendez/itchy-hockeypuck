@@ -28,50 +28,12 @@
       <div class="four wide column">
         <div class="row">
           <div class="ui small vertical fluid pointing menu">
-            <a class="item">
-              MX123456789
-              <span class="ui green label">4</span>
+            {{#tags:i}}
+            <a class="item" on-click="selectTag:{{i}}">
+              {{id}}
+              <span class="ui {{labelColor}} label"><i class="loading icon"></i></span>
             </a>
-            <a class="item">
-              MX123456789
-              <span class="ui green label">4</span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui green label">4</span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui red label">4</span>
-            </a>
-            <a class="active item">
-              MX123456789
-              <span class="ui red label">4</span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui green label">4</span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui green label">4</span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui red label">4</span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui green label">4</span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui label"><i class="loading icon"></i></span>
-            </a>
-            <a class="item">
-              MX123456789
-              <span class="ui label"><i class="loading icon"></i></span>
-            </a>
+            {{/tags}}
           </div>
         </div>
       </div>
