@@ -27,6 +27,11 @@
         return function(err) {
           return _this.labelColor = 'red';
         };
+      })(this)).always((function(_this) {
+        return function(data) {
+          _this.loadingIcon = false;
+          return r.update();
+        };
       })(this));
     };
 
@@ -58,23 +63,33 @@
       serial_num: '',
       show: 'byTag',
       scan: '',
-      tags: []
+      tags: [],
+      devices: [],
+      selectedTag: 0
     }
   });
 
   r.on('getScanner', function(e, val) {
     e.original.preventDefault();
     if (/MX\d{8}/.test(r.data.scan)) {
-      console.log(r.data.scan);
+      r.set('selectedTag', 0);
       r.data.tags.unshift(new Tag(r.data.scan));
       return r.set('scan', '');
+    } else if (/\d{9}/.test(r.data.scan)) {
+      return console.log("El codigo " + r.data.scan + " podria ser numero de serie");
+    } else {
+      return console.log("" + r.data.scan + " no corresponde a ningun patron");
     }
+  });
+
+  r.on('scanType', function(e, type) {
+    e.original.preventDefault();
+    return r.set('show', type);
   });
 
   r.on('selectTag', function(e, tagId) {
     e.original.preventDefault();
-    r.set('selectedTag', tagId);
-    return r.set('scan', tagId);
+    return r.set('selectedTag', tagId);
   });
 
   window.r = r;

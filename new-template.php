@@ -6,10 +6,10 @@
     <a class="item">
       <b>Validador de etiquetas</b>
     </a>
-    <a class="active item">
+    <a class="{{show=='byTag'?'active':''}} item" on-click="scanType:byTag">
       <i class="tags icon"></i> Por etiqueta
     </a>
-    <a class="item">
+    <a class="{{show=='byDevice'?'active':''}} item" on-click="scanType:byDevice">
       <i class="info icon"></i> Por Pieza
     </a>
     <!-- <div class="right menu"> -->
@@ -29,9 +29,9 @@
         <div class="row">
           <div class="ui small vertical fluid pointing menu">
             {{#tags:i}}
-            <a class="item" on-click="selectTag:{{i}}">
+            <a class="item {{(selectedTag==i)?'active':''}}" on-click="selectTag:{{i}}">
               {{id}}
-              <span class="ui {{labelColor}} label"><i class="loading icon"></i></span>
+              <span class="ui {{labelColor}} label">{{{loadingIcon?'<i class="loading icon"></i>':fromDB.length}}}</span>
             </a>
             {{/tags}}
           </div>
@@ -43,7 +43,6 @@
             <thead>
               <tr><th>Item</th>
               <th>Job</th>
-              <!-- <th>Barcode</th> -->
               <th>Location</th>
               <th>Date received</th>
               <th>LPN</th>
@@ -51,20 +50,26 @@
               <th>PackStatus</th>
               <th>Status</th>
               <th>AgedDays</th>
+              <!-- <th>Barcode</th> -->
               <!-- <th>Action</th> -->
             </tr></thead>
             <tbody>
+            {{#with tags[selectedTag]}}
+              {{#fromDB:i}}
               <tr>
-                <td>No Name Specified</td>
-                <td>Approved</td>
-                <td>None</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ITEM}}</td>
+                <td>{{JOB}}</td>
+                <td>{{LOCATION}}</td>
+                <td>{{DATE_RECEIVED}}</td>
+                <td>{{LPN}}</td>
+                <td>{{ONHAND_QTY}}</td>
+                <td>{{PACK_STATUS}}</td>
+                <td>{{STATUS}}</td>
+                <td>{{AGED_DAYS}}</td>
               </tr>
+              {{/fromDB}}
+            {{/with}}
+              <!-- 
               <tr class="error">
                 <td>Jimmy</td>
                 <td>Cannot pull data</td>
@@ -86,36 +91,28 @@
                 <td></td>
                 <td></td>
                 <td></td>
-              </tr>
-              <tr>
-                <td>Jill</td>
-                <td>Approved</td>
-                <td>None</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
+          <!-- 
+          A ver para que me sirve esto mas adelante
           <div class="ui divided list">
             <div class="item">
-              <!-- <div class="right floated tiny teal ui button">A ver para que</div> -->
+              <div class="right floated tiny teal ui button">A ver para que</div>
               <i class="green checked checkbox icon"></i>
               <div class="content">
                 <div class="header">Validacion que si paso</div>
               </div>
             </div>
             <div class="item">
-              <!-- <div class="right floated tiny teal ui button">A ver para que</div> -->
+              <div class="right floated tiny teal ui button">A ver para que</div>
               <i class="warning red icon"></i>
               <div class="content">
                 <div class="header">Causa de la falla</div>
               </div>
             </div>
           </div>
+          -->
         </div>
       </div>
     </div>
