@@ -39,6 +39,7 @@ function getLPN()
 	if ($DB->json() == "[]") {
 		echo '[{"LPN":"' . $_GET['lpn'] . '"}]';
 	} else {
+		// file_put_contents($_GET['lpn'], $DB->json());
 		echo $DB->json();
 	}
 }
