@@ -13,9 +13,9 @@
       <i class="info icon"></i> Por Pieza
     </a>
     <!-- <div class="right menu"> -->
-      <form class="item">
+      <form class="item" on-submit="getScanner:1">
         <div class="ui icon input" autocomplete="off">
-          <input type="text" placeholder="Escanea aqui" autocomplete="off">
+          <input type="text" placeholder="Escanea aqui" autocomplete="off" value="{{scan}}">
           <i class="barcode link icon"></i>
         </div>
       </form>
