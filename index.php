@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Material en FG</title>
-	<link rel="stylesheet" href="../jsLib/SemanticUi/0.19.0/packaged/css/semantic.min.css">
+	<link rel="stylesheet" href="../jsLib/SemanticUi/1.0.0/packaged/css/semantic.min.css">
 	<style type="text/css">
 	@font-face {
 	    font-family: 'Free3of9'; /*a name to be used later*/
