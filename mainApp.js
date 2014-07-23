@@ -49,6 +49,7 @@
       this.id = id;
       this.source = source;
       this.data = [];
+      this.getFromDatabase();
     }
 
     Device.prototype.isFromScan = function() {
@@ -64,7 +65,7 @@
         serial_num: this.id
       }).done((function(_this) {
         return function(data) {
-          _this.fromDB = data;
+          _this.data = data[0];
           _this.labelColor = 'green';
           return r.update();
         };

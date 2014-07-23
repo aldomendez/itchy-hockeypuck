@@ -59,7 +59,7 @@
               {{#fromDB:i}}
               <tr>
                 <td>{{ITEM}}</td>
-                <td>{{JOB}}</td>
+                <td><b>{{JOB}}</b></td>
                 <td>{{LOCATION}}</td>
                 <td>{{DATE_RECEIVED}}</td>
                 <td>{{LPN}}</td>
@@ -144,62 +144,20 @@
             {{#devices}}
               
               <tr>
-                <td>{{fromDB.id}}</td>
-                <td>{{fromDB.JOB}}</td>
-                <td>{{fromDB.LOCATION}}</td>
-                <td>{{fromDB.DATE_RECEIVED}}</td>
-                <td>{{fromDB.LPN}}</td>
-                <td>{{fromDB.ONHAND_QTY}}</td>
-                <td>{{fromDB.PACK_STATUS}}</td>
-                <td>{{fromDB.STATUS}}</td>
-                <td>{{fromDB.AGED_DAYS}}</td>
+                <td>{{data.id}}</td>
+                <td>{{data.JOB}}</td>
+                <td>{{data.LOCATION}}</td>
+                <td>{{data.DATE_RECEIVED}}</td>
+                <td>{{data.LPN}}</td>
+                <td>{{data.ONHAND_QTY}}</td>
+                <td>{{data.PACK_STATUS}}</td>
+                <td>{{data.STATUS}}</td>
+                <td>{{data.AGED_DAYS}}</td>
               </tr>
               
             {{/with}}
-              <!-- 
-              <tr class="error">
-                <td>Jimmy</td>
-                <td>Cannot pull data</td>
-                <td>None</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>Jamie</td>
-                <td>Approved</td>
-                <td class="error"><i class="attention icon"></i> Classified</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr> -->
             </tbody>
           </table>
-          <!-- 
-          A ver para que me sirve esto mas adelante
-          <div class="ui divided list">
-            <div class="item">
-              <div class="right floated tiny teal ui button">A ver para que</div>
-              <i class="green checked checkbox icon"></i>
-              <div class="content">
-                <div class="header">Validacion que si paso</div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="right floated tiny teal ui button">A ver para que</div>
-              <i class="warning red icon"></i>
-              <div class="content">
-                <div class="header">Causa de la falla</div>
-              </div>
-            </div>
-          </div>
-          -->
         </div>
       </div>
     </div>
