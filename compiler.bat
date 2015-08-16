@@ -10,4 +10,4 @@ title Compilador de coffeeScript
 
 cls
 :: Iniciamos el trabajo
-C:\apps\node\coffee -o ./js -cw ./js
+C:\apps\node\coffee -o ./js -mc ./js
