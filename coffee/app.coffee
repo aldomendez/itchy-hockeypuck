@@ -1,12 +1,9 @@
 class Family
   constructor: (@family) ->
-    @showMenu = false
+    @showMenu = true
     @familys={
       'OSA':{
         operations:["OSA","OSA10GB","OSA2-5GB","OSA-COC","OSACRTDV"]
-      }
-      'L2K':{
-        operations:['EML','DML']
       }
       'PIC-DIAMOND':{
         operations:['PIC-DIAMOND']
@@ -37,13 +34,14 @@ class Family
   constructFamilyIndex:()->
     @index = _.keys @familys
   switchFamily:(@family)->
-    r.data.summary = []
-    r.data.specific = {}
+    console.log @family
+    r.set 'summary', []
+    r.set 'specific', {}
     @familys[@family].operations.map (el)=>
-      r.data.summary.push new Summary el
+      r.push 'summary', new Summary el
     # r.update()
-    r.data.show = 'summary'
-    r.data.fm.showMenu = false
+    r.set 'show', 'summary'
+    r.set 'fm.showMenu', false
 
 class Summary
   constructor: (@family) ->
@@ -51,14 +49,12 @@ class Summary
     @get()
 
   get:()->
-    NProgress.start();
     prm = $.getJSON 'toolbox.php', {
       action:'getSummary'
       family:@family
     }
     .done (data)=>
       @data = data
-      NProgress.done();
       r.update()
 
 class Specific
@@ -66,7 +62,6 @@ class Specific
     @data = []
     @get()
   get:()->
-    NProgress.start();
     prm = $.getJSON 'toolbox.php', {
       action:'getSpecific'
       family:@family
@@ -75,7 +70,6 @@ class Specific
       @data = data
       @createHeader()
       @filter @operation
-      NProgress.done();
   createHeader:()->
     @header = _.uniq _.pluck @data, 'OPN_CODE'
   filter:(@operation='')->
@@ -93,34 +87,30 @@ r = new Ractive {
   template: '#template'
   data:{
     fm:fm
-    summary:[
-      new Summary 'OSA'
-      new Summary 'OSA10GB'
-      new Summary 'OSA2-5GB'
-      new Summary 'OSA-COC'
-      new Summary 'OSACRTDV'
-    ]
+    summary:[]
     specific:{}
     meta:{
         specific:{
-          selected:'OSACRTDV'
+          selected:''
           family:''
       }
     }
     show:'summary'
-    justName:(fullName)-> fullName.match(/\w*/)
+    justName:(fullName)-> 
+      # console.log fullName
+      fullName.match(/\w*/)
   }
 }
 
 r.on 'familyDetail', (e,val)->
   e.original.preventDefault()
-  family = r.data.summary[e.keypath.match(/\w*\.(\d+)/i)[1]].family
-  # console.log family
-  if !r.data.specific[family]?
-    r.data.specific[family] = new Specific family
+  family = r.get("summary[#{e.keypath.match(/\w*\.(\d+)/i)[1]}]").family
+  console.log family
+  if !r.get("specific.#{family}")?
+    r.set "specific.#{family}", new Specific family
     r.set 'meta.specific.selected', family
   else
-    r.data.specific[family].filter ''
+    r.get("specific.#{family}").filter ''
     r.set 'meta.specific.selected', family
   r.set 'show', 'specific'
   
@@ -128,15 +118,15 @@ r.on 'familyDetail', (e,val)->
 r.on 'CodeDetail', (e,val)->
   e.original.preventDefault()
   [d,f,c] = e.keypath.match(/\w*\.(\d+)\.\w+\.(\d+)/i)
-  family = r.data.summary[f].family
-  operation = r.data.summary[f].data[c].OPN_CODE
+  family = r.get "summary[#{f}].family"
+  operation = r.get "summary[#{f}].data[#{c}].OPN_CODE"
   console.log [family, operation]
 
-  if !r.data.specific[family]?
-    r.data.specific[family] = new Specific family, operation
+  if !r.get("specific.#{family}")?
+    r.set "specific.#{family}", new Specific family, operation
     r.set 'meta.specific.selected', family
   else
-    r.data.specific[family].filter operation
+    r.get("specific.#{family}").filter operation
     r.set 'meta.specific.selected', family
 
   r.set 'show', 'specific'
@@ -144,11 +134,11 @@ r.on 'CodeDetail', (e,val)->
 
 r.on 'unfilter', (e)->
   e.original.preventDefault()
-  r.data.specific[r.data.meta.specific.selected].filter ''
+  r.get("specific.#{r.get 'meta.specific.selected'}").filter ''
 
 r.on 'filter', (e, operation)->
   e.original.preventDefault()
-  r.data.specific[r.data.meta.specific.selected].filter operation
+  r.get("specific.#{r.get 'meta.specific.selected'}").filter operation
 
 r.on 'show', (e, element)->
   e.original.preventDefault()
@@ -156,11 +146,13 @@ r.on 'show', (e, element)->
 
 r.on 'toggleFamily', (e)->
   e.original.preventDefault()
-  r.set 'fm.showMenu', !r.data.fm.showMenu
-  console.log r.data.fm.showMenu
+  r.set 'fm.showMenu', !r.get 'fm.showMenu'
+  console.log r.get 'fm.showMenu'
+
 r.on 'selectFamily', (e,fam)->
   e.original.preventDefault()
-  console.log fam
-  r.data.fm.switchFamily fam
+  # console.log r.get 'fm'
+  # console.log fam
+  r.get("fm").switchFamily fam
 
 window.r = r

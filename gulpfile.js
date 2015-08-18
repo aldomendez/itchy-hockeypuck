@@ -26,7 +26,7 @@ copy = function copyAndReload (event) {
   console.log('Sended to: ',serverPath(event.path));
   gulp.src(event.path)
        .pipe(gulp.dest(DEST + serverPath(event.path)))
-       .pipe(livereload(0));
+       .pipe(livereload(600));
 }
 
 compileAndPush = function compileAndPush (event) {
@@ -34,8 +34,10 @@ compileAndPush = function compileAndPush (event) {
   path = '.' + path.replace('\\','/');
   console.log(path);
   gulp.src(path)
+    .pipe(gulp.dest(DEST + serverPath(event.path)))
+  gulp.src(path)
     .pipe(coffee()).on('error',gutil.log)
-    .pipe(gulp.dest('./js'))
+    .pipe(gulp.dest('./js/'))
     .pipe(gulp.dest(DEST + serverPath(event.path)))
     .pipe(wait(1200))
     .pipe(livereload());
@@ -48,7 +50,7 @@ gulp.task('watch', function () {
     me gustaria que pudiera decirle cueles son las carpetas que 
     tiene que omitir.
   */
-  gulp.watch(['coffee/**.coffee'], function (event) {
+  gulp.watch(['coffee/*.coffee'], function (event) {
   }).on('change', function (event) {
      compileAndPush(event);
   });  
@@ -72,7 +74,7 @@ gulp.task('watch', function () {
   }).on('change', function (event) {
      copyAndReload(event);
   });  
-  gulp.watch(['js/**.js','gulpfile.js'], function (event) {
+  gulp.watch(['js/*.js','gulpfile.js'], function (event) {
   }).on('change', function (event) {
      copyAndReload(event);
   });  

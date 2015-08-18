@@ -64,7 +64,7 @@ function getSummary()
 
 	date_default_timezone_set("America/Monterrey");
 
-	if ( serveCached('summary') ) {
+	if ( false ) {
 		echo file_get_contents(getFilename('summary'));
 	} else {
 		$query = file_get_contents('sql/summary.sql');
@@ -72,7 +72,6 @@ function getSummary()
 		$DB->setQuery($query);
 		$DB->bind_vars(':family',$family);
 		$DB->exec();
-		file_put_contents(getFilename('summary'), $DB->json());
 		echo $DB->json();
 	}
 }
@@ -87,7 +86,7 @@ function getSpecific()
 	
 	date_default_timezone_set("America/Monterrey");
 	
-	if ( serveCached('specific') ) {
+	if ( false ) {
 		echo file_get_contents(getFilename('specific'));
 	} else {
 		$query = file_get_contents('sql/specific.sql');
@@ -95,7 +94,6 @@ function getSpecific()
 		$DB->setQuery($query);
 		$DB->bind_vars(':family',$family);
 		$DB->exec();
-		file_put_contents(getFilename('specific'), $DB->json());
 		echo $DB->json();
 	}
 }

@@ -119,7 +119,7 @@
             <td>{{JOB}}</td>
             <td>{{JOB_CREATION_DATE}}</td>
             <td>{{OPN_CODE}}</td>
-            <td>{{justName(OPN_DESCRIPTION)}}</td>
+            <td>{{OPN_DESCRIPTION}}</td>
             <td>{{QTY}}</td>
             <td>{{JOB_STATUS}}</td>
             <td>{{DAYS_SINCE_LAST_MOVE}}</td>
